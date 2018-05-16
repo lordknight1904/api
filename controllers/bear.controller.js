@@ -32,8 +32,11 @@ export function addBear(req, res, next) {
   });
   Bear.add(bear, (err, bear) => {
     if (err) {
-      req.status = 500;
-      req.error = err;
+      console.log(err);
+      // const errors = err.errors;
+      // const error = errors[Object.keys(errors)[0]];
+      // req.status = 500;
+      // req.error = error.message;
     } else {
       req.status = 200;
     }
