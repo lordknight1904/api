@@ -28,10 +28,10 @@ adminSchema.plugin(uniqueValidator, { message: 'This {PATH} has been taken.' });
 
 adminSchema.statics = {
   get(id, cb) {
-    return this.findById({ _id: id }).exec(cb);
+    return this.findById({ _id: id }).populate('role', 'name').exec(cb);
   },
   getAll(cb) {
-    return this.find({}, cb);
+    return this.find({}).populate('role', 'name').exec(cb);
   },
   add(obj, cb) {
     return this.create(obj, cb);
