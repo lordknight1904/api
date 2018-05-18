@@ -45,6 +45,7 @@ export function addAdmin(req, res, next) {
 }
 export function authenticate(req, res, next) {
   const reqAdmin = req.body.admin;
+  console.log(req.body);
   const admin = new Admin({
     username: reqAdmin.username,
     password: reqAdmin.password,

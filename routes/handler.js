@@ -2,7 +2,7 @@ const handler = (req, res) => {
   res.type('json');
   res.status(req.status);
   res.json({
-    data: req.data,
+    data: req.data ? req.data : 'success',
     error: req.error,
   });
   // switch (req.status) {
