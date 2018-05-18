@@ -13,7 +13,8 @@ app.use(cors());
 // ROUTES FOR OUR API
 
 import bear from './routes/bear.routes';
-app.use('/api', [bear]);
+import role from './routes/role.routes';
+app.use('/api', [bear, role]);
 
 mongoose.connect(config.mongoURL, (error) => {
   if (error) {
