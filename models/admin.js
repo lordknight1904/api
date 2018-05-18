@@ -19,9 +19,21 @@ function decrypt(password){
 }
 
 const adminSchema = new Schema({
-  username: { type: 'String', required: [true, 'Username must be provided'], unique: true },
-  password: { type: 'String', required: [true, 'Password must be provided'], get: decrypt, set: encrypt },
-  role: { type: Schema.Types.ObjectId, ref: 'Role', required: [true, 'Role must be provided'] },
+  username: {
+    type: 'String',
+    required: [true, 'Username must be provided.'],
+    min: [6, 'Username must contains 6 character or more.'],
+    max: [20, 'Username must contains less than 20 characters.'],
+    unique: true
+  },
+  password: { type: 'String',
+    required: [true, 'Password must be provided.'],
+    min: [6, 'Password must contains 6 character or more.'],
+    max: [20, 'Password must contains less than 20 characters.'],
+    get: decrypt,
+    set: encrypt
+  },
+  role: { type: Schema.Types.ObjectId, ref: 'Role', required: [true, 'Role must be provided.'] },
   dateCreated: { type: Date, default: Date.now },
 });
 adminSchema.plugin(uniqueValidator, { message: 'This {PATH} has been taken.' });
