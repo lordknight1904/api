@@ -6,6 +6,7 @@ export function getAllRole(req, res, next) {
       req.status = 500;
       req.error = err;
     } else {
+      console.log(role);
       req.status = 200;
       req.data = role;
     }

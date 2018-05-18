@@ -1,9 +1,15 @@
 import mongoose from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
+import moment from 'moment';
+import config from "../config";
 const Schema = mongoose.Schema;
 
+function timeFormat(dateCreated){
+  return moment(dateCreated).format('MMMM Do YYYY, h:mm');
+}
+
 const roleSchema = new Schema({
-  name: { type: 'String', required: [true, 'Name must be provided.'], unique: [true, 'This name has been taken'] },
+  name: { type: 'String', required: [true, 'Name must be provided.'], unique: true },
   dateCreated: { type: Date, default: Date.now },
 });
 roleSchema.plugin(uniqueValidator, { message: 'This {PATH} has been taken.' });

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import uniqueValidator from 'mongoose-unique-validator';
 import crypto from 'crypto';
 import config from '../config'
 const Schema = mongoose.Schema;
@@ -18,11 +19,12 @@ function decrypt(password){
 }
 
 const adminSchema = new Schema({
-  username: { type: 'String', required: [true, 'Username must be provided'] },
+  username: { type: 'String', required: [true, 'Username must be provided'], unique: true },
   password: { type: 'String', required: [true, 'Password must be provided'], get: decrypt, set: encrypt },
-  role: { type: 'String', required: [true, 'Role must be provided'] },
+  role: { type: Schema.Types.ObjectId, ref: 'Role', required: [true, 'Role must be provided'] },
   dateCreated: { type: Date, default: Date.now },
 });
+adminSchema.plugin(uniqueValidator, { message: 'This {PATH} has been taken.' });
 
 adminSchema.statics = {
   get(id, cb) {
@@ -40,8 +42,10 @@ adminSchema.statics = {
   delete(id, cb) {
     return this.findOneAndDelete({ _id: id }).exec(cb);
   },
-  authenticate(username, password, cb) {
-    return this.findOne({ username, password}).exec(cb);
+  authenticate(admin, cb) {
+    return this.findOne({ username: admin.username, password: admin.password})
+      .populate('role', 'name')
+      .exec(cb);
   }
 };
 

@@ -14,7 +14,8 @@ app.use(cors());
 
 import bear from './routes/bear.routes';
 import role from './routes/role.routes';
-app.use('/api', [bear, role]);
+import admin from './routes/admin.routes';
+app.use('/api', [bear, role, admin]);
 
 mongoose.connect(config.mongoURL, (error) => {
   if (error) {

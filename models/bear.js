@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import uniqueValidator from "mongoose-unique-validator";
+import config from "../config";
 const Schema = mongoose.Schema;
 
 const bearSchema = new Schema({
