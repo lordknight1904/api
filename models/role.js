@@ -1,10 +1,12 @@
 import mongoose from 'mongoose';
+import uniqueValidator from 'mongoose-unique-validator';
 const Schema = mongoose.Schema;
 
 const roleSchema = new Schema({
-  name: { type: 'String', required: [true, 'Name must be provided'] },
+  name: { type: 'String', required: [true, 'Name must be provided.'], unique: [true, 'This name has been taken'] },
   dateCreated: { type: Date, default: Date.now },
 });
+roleSchema.plugin(uniqueValidator, { message: 'This {PATH} has been taken.' });
 
 roleSchema.statics = {
   get(id, cb) {

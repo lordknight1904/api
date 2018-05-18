@@ -6,7 +6,7 @@
   ],
   "verbose": true,
   "watch": [
-    "server"
+    "index"
   ],
   "env": {
     "NODE_ENV": "development"

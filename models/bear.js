@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import uniqueValidator from "mongoose-unique-validator";
 const Schema = mongoose.Schema;
 
 const bearSchema = new Schema({
@@ -6,18 +7,7 @@ const bearSchema = new Schema({
   age: { type: 'number', required: [true, 'Age must be provided'] },
   dateCreated: { type: Date, default: Date.now },
 });
-const handleDuplicate = (error, res, next) => {
-  if (error.name === 'MongoError' && error.code === 11000) {
-    next(new Error('Name existed'));
-  } else {
-    next();
-  }
-};
-
-// bearSchema.post('save', handleDuplicate);
-// bearSchema.post('update', handleDuplicate);
-// bearSchema.post('findOneAndUpdate', handleDuplicate);
-// bearSchema.post('insertMany', handleDuplicate);
+bearSchema.plugin(uniqueValidator, { message: 'This {PATH} has been taken.' });
 
 bearSchema.statics = {
   get(id, cb) {
