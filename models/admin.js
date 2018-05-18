@@ -5,13 +5,16 @@ import config from '../config'
 const Schema = mongoose.Schema;
 
 function encrypt(password){
-  const cipher = crypto.createCipher('aes-256-cbc', config.SERVER_ADMIN_PASSWORD_SECRET);
-  let encrypted = cipher.update(password,'utf8','hex');
-  encrypted += cipher.final('hex');
-  return encrypted;
+  if (password.length < 6) return password;
+  else {
+    const cipher = crypto.createCipher('aes-256-cbc', config.SERVER_ADMIN_PASSWORD_SECRET);
+    let encrypted = cipher.update(password, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    return encrypted;
+  }
 }
 function decrypt(password){
-  if (password === null || typeof password === 'undefined') {return password;}
+  if (password.length < 6 ||password === null || typeof password === 'undefined') {return password;}
   const decipher = crypto.createDecipher('aes-256-cbc', config.SERVER_ADMIN_PASSWORD_SECRET);
   let decrypted = decipher.update(password,'hex','utf8');
   decrypted += decipher.final('utf8');
@@ -31,19 +34,7 @@ const adminSchema = new Schema({
     type: 'String',
     trim: true,
     required: [true, 'Password must be provided.'],
-    // minlength: [6, 'Password must contains 6 character or more.'],
-    validate: {
-      validator: (v) => {
-        return new Promise((resolve, reject) => {
-          if (v.length < 6) {
-            resolve(false);
-          } else {
-            resolve(true);
-          }
-        });
-      },
-      message: 'Password must contains 6 character or more.'
-    },
+    minlength: [6, 'Password must contains 6 character or more.'],
     maxlength: [20, 'Password must contains less than 20 characters.'],
     get: decrypt,
     set: encrypt
